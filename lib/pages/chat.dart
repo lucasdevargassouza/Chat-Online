@@ -1,3 +1,4 @@
+import 'package:chat_online/share/components/chat_message.dart';
 import 'package:chat_online/share/components/text_composer.dart';
 import 'package:flutter/material.dart';
 
@@ -21,6 +22,38 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         body: Column(
           children: <Widget>[
+            Expanded(
+              child: ListView(
+                children: <Widget>[
+                  ChatMessage(),
+                  ChatMessage(),
+                  ChatMessage(),
+                  ChatMessage(), 
+                  ChatMessage(), 
+                  ChatMessage(), 
+                  ChatMessage(), 
+                  ChatMessage(), 
+                  ChatMessage(), 
+                  ChatMessage(), 
+                  ChatMessage(), 
+                  ChatMessage(), 
+                  ChatMessage(), 
+                  ChatMessage(), 
+                  ChatMessage(), 
+                  ChatMessage(), 
+                  ChatMessage(), 
+                  ChatMessage(), 
+                  ChatMessage(), 
+                  ChatMessage(), 
+                  ChatMessage(), 
+                  ChatMessage(), 
+                  ChatMessage(), 
+                ],
+              ),
+            ),
+            Divider(
+              height: 1.0,
+            ),
             Container(
               decoration: BoxDecoration(color: Theme.of(context).cardColor),
               child: TextComposer(),

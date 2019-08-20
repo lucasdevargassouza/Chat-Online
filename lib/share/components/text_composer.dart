@@ -56,3 +56,4 @@ class _TextComposerState extends State<TextComposer> {
     );
   }
 }
+
