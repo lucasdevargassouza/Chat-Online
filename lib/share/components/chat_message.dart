@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
-class ChatMessage extends StatefulWidget {
-  @override
-  _ChatMessageState createState() => _ChatMessageState();
-}
+class ChatMessage extends StatelessWidget {
+  final Map<String, dynamic> data;
 
-class _ChatMessageState extends State<ChatMessage> {
+  ChatMessage(this.data);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -16,8 +15,7 @@ class _ChatMessageState extends State<ChatMessage> {
           Container(
             margin: const EdgeInsets.only(right: 16.0),
             child: CircleAvatar(
-              backgroundImage: NetworkImage(
-                  "https://www.stickees.com/files/avatars/male-avatars/1697-andrew-sticker.png"),
+              backgroundImage: NetworkImage(data["senderPhotoUrl"]),
             ),
           ),
           Expanded(
@@ -25,15 +23,21 @@ class _ChatMessageState extends State<ChatMessage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  "Lucas",
+                  data["senderName"],
                   style: Theme.of(context).textTheme.subhead,
                 ),
                 Container(
-                  child: Text("Meu teste e msg!"),
+                  margin: const EdgeInsets.only(right: 16.0),
+                  child: data["imgUrl"] != null
+                      ? Image.network(
+                          data["imgUrl"],
+                          width: 250.0,
+                        )
+                      : Text(data["text"]),
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

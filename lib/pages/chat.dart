@@ -1,5 +1,6 @@
 import 'package:chat_online/share/components/chat_message.dart';
 import 'package:chat_online/share/components/text_composer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -23,32 +24,27 @@ class _ChatScreenState extends State<ChatScreen> {
         body: Column(
           children: <Widget>[
             Expanded(
-              child: ListView(
-                children: <Widget>[
-                  ChatMessage(),
-                  ChatMessage(),
-                  ChatMessage(),
-                  ChatMessage(), 
-                  ChatMessage(), 
-                  ChatMessage(), 
-                  ChatMessage(), 
-                  ChatMessage(), 
-                  ChatMessage(), 
-                  ChatMessage(), 
-                  ChatMessage(), 
-                  ChatMessage(), 
-                  ChatMessage(), 
-                  ChatMessage(), 
-                  ChatMessage(), 
-                  ChatMessage(), 
-                  ChatMessage(), 
-                  ChatMessage(), 
-                  ChatMessage(), 
-                  ChatMessage(), 
-                  ChatMessage(), 
-                  ChatMessage(), 
-                  ChatMessage(), 
-                ],
+              child: StreamBuilder(
+                stream: Firestore.instance.collection("messages").snapshots(),
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                    case ConnectionState.waiting:
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                      break;
+                    default:
+                      return ListView.builder(
+                        reverse: true,
+                        itemCount: snapshot.data.documents.length,
+                        itemBuilder: (context, index) {
+                          List listaInversa = snapshot.data.documents.reversed.toList();
+                          return ChatMessage(listaInversa[index].data);
+                        },
+                      );
+                  }
+                },
               ),
             ),
             Divider(

@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:chat_online/share/services/firebase_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class TextComposer extends StatefulWidget {
   @override
@@ -17,7 +20,7 @@ class _TextComposerState extends State<TextComposer> {
 
     _msgToSend.clear();
     setState(() {
-     _isComposing = false; 
+      _isComposing = false;
     });
   }
 
@@ -37,7 +40,12 @@ class _TextComposerState extends State<TextComposer> {
             Container(
               child: IconButton(
                 icon: Icon(Icons.photo_camera),
-                onPressed: () {},
+                onPressed: () async {
+                  await ensureLoggedIn();
+                  File imgFile =
+                      await ImagePicker.pickImage(source: ImageSource.camera);
+                  saveFileOnFirebaseStorage(imgFile);
+                },
               ),
             ),
             Expanded(
@@ -59,11 +67,19 @@ class _TextComposerState extends State<TextComposer> {
               child: Theme.of(context).platform == TargetPlatform.iOS
                   ? CupertinoButton(
                       child: Text("Enviar"),
-                      onPressed: _isComposing ? () { _handleSubmitted(_msgToSend.text); } : null,
+                      onPressed: _isComposing
+                          ? () {
+                              _handleSubmitted(_msgToSend.text);
+                            }
+                          : null,
                     )
                   : IconButton(
                       icon: Icon(Icons.send),
-                      onPressed: _isComposing ? () { _handleSubmitted(_msgToSend.text); } : null,
+                      onPressed: _isComposing
+                          ? () {
+                              _handleSubmitted(_msgToSend.text);
+                            }
+                          : null,
                     ),
             ),
           ],
@@ -72,4 +88,3 @@ class _TextComposerState extends State<TextComposer> {
     );
   }
 }
-

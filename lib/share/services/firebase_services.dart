@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 final googleSignIn = GoogleSignIn();
@@ -33,4 +36,19 @@ void sendMessage({String text, String imgUrl}) {
       "senderPhotoUrl": googleSignIn.currentUser.photoUrl,
     },
   );
+}
+
+saveFileOnFirebaseStorage(File imgFile) async {
+  if (imgFile == null) return;
+
+  StorageUploadTask task = FirebaseStorage.instance
+      .ref()
+      .child(googleSignIn.currentUser.id.toString() +
+          DateTime.now().millisecondsSinceEpoch.toString())
+      .putFile(imgFile);
+
+  StorageTaskSnapshot taskSnapshot = await task.onComplete;
+  String url = await taskSnapshot.ref.getDownloadURL();
+
+  sendMessage(imgUrl: url);
 }
